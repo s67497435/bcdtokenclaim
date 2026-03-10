@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#6366f1">
+    <base href="/">
+    <title>BCD Token - Futuristic Claim Platform</title>
+    <link rel="stylesheet" href="styles.css" onerror="console.error('Failed to load styles.css')">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" onerror="console.error('Failed to load script.js')"></script>
+    <script type="module" src="wallet.js" onerror="console.error('Failed to load wallet.js')"></script>
+</head>
+<body>
+<!-- Diagnostic Script -->
+<script>
+    console.log('Page URL:', window.location.href);
+    console.log('Base URI:', document.baseURI);
+    document.addEventListener('DOMContentLoaded', () => {
+        const cssLoaded = !!document.querySelector('link[href="styles.css"]');
+        console.log('CSS link present:', cssLoaded);
+        // Check if styles are actually applied
+        const testDiv = document.createElement('div');
+        testDiv.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1';
+        document.body.appendChild(testDiv);
+        const computed = getComputedStyle(testDiv);
+        console.log('Body background:', getComputedStyle(document.body).backgroundColor);
+        testDiv.remove();
+    });
+</script>
+
+<!-- UX STATUS MODAL -->
+<div id="uxModal" class="ux-backdrop hidden">
+  <div class="ux-modal">
+    <div class="ux-spinner"></div>
+    <div class="ux-status-icon" id="uxIcon"></div>
+    <p id="uxText">Initializing…</p>
+  </div>
+</div>
+
+<!-- Fake Claim Notifications -->
+<div id="claimNotifications" class="claim-notifications"></div>
+
+    <!-- Futuristic Animated Background -->
+    <div class="futuristic-bg">
+        <div class="cyber-grid"></div>
+        <div class="floating-particles"></div>
+        <div class="neon-orbs"></div>
+        <div class="data-stream"></div>
+        <div class="holographic-effect"></div>
+    </div>
+
+    <!-- Glitch Header -->
+    <header class="cyber-header">
+        <div class="header-glow"></div>
+        <nav class="neuro-navbar">
+            <div class="nav-container">
+                <div class="logo-container">
+                    <div class="logo holographic-logo">
+                        <div class="logo-core">
+                            <img src="logo.png" alt="BCD Token" class="logo-img">
+                            <div class="logo-scanner"></div>
+                        </div>
+                        <div class="logo-particles"></div>
+                    </div>
+                    <span class="logo-text glitch-text">BCD<span class="glitch-char">_</span>TOKEN</span>
+                </div>
+                <div class="nav-menu">
+                    <a href="#home" class="nav-link cyber-link">
+                        <span class="link-text">HOME</span>
+                        <span class="link-glow"></span>
+                    </a>
+                    <a href="#features" class="nav-link cyber-link">
+                        <span class="link-text">FEATURES</span>
+                        <span class="link-glow"></span>
+                    </a>
+                    <a href="#claim" class="nav-link cyber-link">
+                        <span class="link-text">CLAIM</span>
+                        <span class="link-glow"></span>
+                    </a>
+                    <a href="#about" class="nav-link cyber-link">
+                        <span class="link-text">ABOUT</span>
+                        <span class="link-glow"></span>
+                    </a>
+                </div>
+                <div class="hamburger cyber-hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <div class="hamburger-glow"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Cyber Hero Section -->
+        <section id="home" class="cyber-hero">
+            <div class="hero-particles"></div>
+            <div class="data-stream-overlay"></div>
+            <div class="hero-content">
+                <div class="hero-left">
+                    <div class="cyber-badge">
+                        <div class="badge-glow"></div>
+                        <i class="fas fa-rocket"></i>
+                        <span>LIMITED OFFER</span>
+                        <div class="badge-scanner"></div>
+                    </div>
+                    <h1 class="cyber-title">
+                        <span class="title-main glitch-title">BCD<span class="glitch-overlay">TOKEN</span></span>
+                        <span class="title-sub cyber-subtitle">CLAIM YOUR DIGITAL FUTURE</span>
+                        <div class="title-scanner"></div>
+                    </h1>
+                    <p class="cyber-description">
+                        <span class="desc-line">Enter the cyber revolution of digital finance</span>
+                        <span class="desc-highlight">Claim up to <strong class="neon-text">5,000 BCD</strong> tokens</span>
+                        <span class="desc-line">Valued at <strong class="neon-text">$1.00 each</strong></span>
+                        <span class="desc-line">Limited quantum supply - act now!</span>
+                    </p>
+                    <div class="cyber-stats">
+                        <div class="stat-cube">
+                            <div class="cube-face front">
+                                <span class="stat-number">1 BCD</span>
+                                <span class="stat-label">$1.00 USD</span>
+                            </div>
+                            <div class="cube-face back"></div>
+                            <div class="cube-face left"></div>
+                            <div class="cube-face right"></div>
+                            <div class="cube-face top"></div>
+                            <div class="cube-face bottom"></div>
+                        </div>
+                        <div class="stat-cube">
+                            <div class="cube-face front">
+                                <span class="stat-number" id="maxClaimValue" data-target="5000">5,000</span>
+                                <span class="stat-label">MAX CLAIM</span>
+                            </div>
+                            <div class="cube-face back"></div>
+                            <div class="cube-face left"></div>
+                            <div class="cube-face right"></div>
+                            <div class="cube-face top"></div>
+                            <div class="cube-face bottom"></div>
+                        </div>
+                        <div class="stat-cube">
+                            <div class="cube-face front">
+                                <span class="stat-number" id="networkValue" data-target="1">BSC</span>
+                                <span class="stat-label">NETWORK</span>
+                            </div>
+                            <div class="cube-face back"></div>
+                            <div class="cube-face left"></div>
+                            <div class="cube-face right"></div>
+                            <div class="cube-face top"></div>
+                            <div class="cube-face bottom"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quantum Countdown Timer -->
+                    <div class="quantum-countdown">
+                        <div class="countdown-header">
+                            <div class="header-glow"></div>
+                            <i class="fas fa-clock"></i>
+                            <span>QUANTUM TIMER</span>
+                            <div class="header-scanner"></div>
+                        </div>
+                        <div class="countdown-timer">
+                            <div class="time-pod">
+                                <div class="pod-glow"></div>
+                                <span class="time-value" id="days">00</span>
+                                <span class="time-label">DAYS</span>
+                                <div class="pod-scanner"></div>
+                            </div>
+                            <div class="time-pod">
+                                <div class="pod-glow"></div>
+                                <span class="time-value" id="hours">00</span>
+                                <span class="time-label">HOURS</span>
+                                <div class="pod-scanner"></div>
+                            </div>
+                            <div class="time-pod">
+                                <div class="pod-glow"></div>
+                                <span class="time-value" id="minutes">00</span>
+                                <span class="time-label">MINS</span>
+                                <div class="pod-scanner"></div>
+                            </div>
+                            <div class="time-pod">
+                                <div class="pod-glow"></div>
+                                <span class="time-value" id="seconds">00</span>
+                                <span class="time-label">SECS</span>
+                                <div class="pod-scanner"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cyber-buttons">
+                        <button class="quantum-btn claim-btn" onclick="scrollToClaim()">
+                            <div class="btn-glow"></div>
+                            <div class="btn-scanner"></div>
+                            <i class="fas fa-coins"></i>
+                            <span>CLAIM NOW</span>
+                            <div class="btn-particles"></div>
+                        </button>
+                        <button class="hologram-btn learn-more">
+                            <div class="btn-glow"></div>
+                            <div class="btn-scanner"></div>
+                            <i class="fas fa-play-circle"></i>
+                            <span>HOW IT WORKS</span>
+                            <div class="btn-particles"></div>
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="holographic-showcase">
+                        <div class="hologram-projector">
+                            <div class="main-token">
+                                <img src="logo.png" alt="BCD Token" class="token-image">
+                                <div class="token-hologram"></div>
+                                <div class="token-energy"></div>
+                                <div class="token-ring"></div>
+                            </div>
+                            <div class="hologram-particles"></div>
+                        </div>
+                        <div class="floating-tokens">
+                            <div class="floating-token token-1">
+                                <img src="logo.png" alt="BCD" width="50" height="50">
+                                <div class="token-glow"></div>
+                            </div>
+                            <div class="floating-token token-2">
+                                <img src="logo.png" alt="BCD" width="40" height="40">
+                                <div class="token-glow"></div>
+                            </div>
+                            <div class="floating-token token-3">
+                                <img src="logo.png" alt="BCD" width="45" height="45">
+                                <div class="token-glow"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Claim Section -->
+        <section id="claim" class="claim-section">
+            <div class="container">
+                <div class="claim-header">
+                    <h2 class="claim-title">Claim Your BCD Tokens</h2>
+                    <p class="claim-subtitle">Connect your wallet and check eligibility in seconds</p>
+                </div>
+                
+                <div class="claim-grid">
+                    <!-- Animated Wallet Connection Card -->
+                    <div class="claim-card wallet-card animated-wallet">
+                        <div class="card-header">
+                            <div class="card-icon pulse-icon">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <h3>Connect Your Wallet</h3>
+                        </div>
+                        
+                        <div class="wallet-animation-container">
+                            <div class="floating-wallets">
+                                <div class="floating-wallet metamask-float">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
+                                </div>
+                                <div class="floating-wallet trust-float">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="floating-wallet coinbase-float">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg" alt="Coinbase">
+                                </div>
+                            </div>
+                            
+                            <div class="central-connect-btn">
+                                <button id="connectBtn">Connect Wallet</button>
+                            </div>
+                            
+                            <div class="wallet-orbs">
+                                <div class="orb orb-1"></div>
+                                <div class="orb orb-2"></div>
+                                <div class="orb orb-3"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="connection-status" id="connectionStatus">
+                            <div class="status-indicator offline"></div>
+                            <span>Ready to connect</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Enhanced Claim Details Card -->
+                    <div class="claim-card claim-details-card enhanced">
+                        <div class="card-header">
+                            <div class="card-icon pulse-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <h3>Claim Dashboard</h3>
+                        </div>
+                        
+                        <div class="claim-overview">
+                            <div class="overview-header">
+                                <div class="token-display">
+                                    <div class="token-icon">
+                                        <img src="logo.png" alt="BCD" width="40" height="40">
+                                    </div>
+                                    <div class="token-info">
+                                        <span class="token-name">BCD Token</span>
+                                        <span class="token-value">$1.00 USD</span>
+                                    </div>
+                                </div>
+                                <div class="claim-progress">
+                                    <div class="progress-circle">
+                                        <svg width="60" height="60">
+                                            <circle cx="30" cy="30" r="25" stroke="var(--border-color)" stroke-width="3" fill="none"/>
+                                            <circle cx="30" cy="30" r="25" stroke="var(--accent)" stroke-width="3" fill="none"
+                                                    stroke-dasharray="157" stroke-dashoffset="39" stroke-linecap="round"
+                                                    transform="rotate(-90 30 30)"/>
+                                        </svg>
+                                        <span class="progress-text">75%</span>
+                                    </div>
+                                    <span class="progress-label">Available</span>
+                                </div>
+                            </div>
+                            
+                            <div class="claim-stats-grid">
+                                <div class="claim-stat-item">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-gift"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-value" id="maxClaimValue2">5,000</span>
+                                        <span class="stat-desc">Max Claim</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="claim-stat-item">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-value">12.5K</span>
+                                        <span class="stat-desc">Claimers</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="claim-stat-item">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-value">$62.5M</span>
+                                        <span class="stat-desc">Total Value</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="eligibility-checker">
+                                <div class="checker-header">
+                                    <i class="fas fa-search"></i>
+                                    <span>Check Your Eligibility</span>
+                                </div>
+                                <button class="eligibility-check-btn" onclick="checkEligibility()">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Check Eligibility</span>
+                                </button>
+                                <div class="eligibility-result" id="eligibilityResult">
+                                    <!-- Results will appear here -->
+                                </div>
+                            </div>
+                            
+                            <button class="claim-now-btn" onclick="startClaimProcess()">
+                                <div class="btn-content">
+                                    <i class="fas fa-rocket"></i>
+                                    <span>Claim Your BCD Now</span>
+                                </div>
+                                <div class="btn-shine"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <div class="container">
+                <h2 class="section-title">Why Choose BCD Token?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Secure & Safe</h3>
+                        <p>Advanced blockchain security with smart contract audits and multi-layer protection.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3>Lightning Fast</h3>
+                        <p>Instant transactions with minimal fees and high throughput capacity.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Growth Potential</h3>
+                        <p>Designed for long-term value appreciation and ecosystem expansion.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Community Driven</h3>
+                        <p>Strong community governance and decentralized decision making.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="1000000">0</div>
+                        <div class="stat-label">Total Supply</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="50000">0</div>
+                        <div class="stat-label">Holders</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="150">0</div>
+                        <div class="stat-label">Countries</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="99">0</div>
+                        <div class="stat-label">Uptime %</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="footerLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#00ccff;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="url(#footerLogoGradient)" stroke-width="3" opacity="0.8"/>
+                            <path d="M30 30 Q50 20, 70 30 L70 60 Q50 80, 30 60 Z" fill="url(#footerLogoGradient)" opacity="0.9"/>
+                            <text x="50" y="55" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">BCD</text>
+                        </svg>
+                        <span>BCD Token</span>
+                    </div>
+                    <p>The future of digital assets is here. Join the revolution today.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#claim">Claim</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Whitepaper</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-reddit"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 BCD Token. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Live Support Widget -->
+    <div class="support-widget" id="supportWidget">
+        <button class="support-toggle" onclick="toggleSupport()">
+            <i class="fas fa-headset"></i>
+            <span>Live Support</span>
+        </button>
+        <div class="support-panel">
+            <div class="support-header">
+                <h4>Live Support</h4>
+                <button class="close-support" onclick="toggleSupport()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="support-content" id="supportContent">
+                <div class="support-message">
+                    <p>👋 Welcome to BCD Token Support!</p>
+                    <p>How can we help you today?</p>
+                </div>
+                <div class="support-options">
+                    <button class="support-option" onclick="handleSupportClick('How to claim tokens?')">How to claim tokens?</button>
+                    <button class="support-option" onclick="handleSupportClick('Wallet connection issues')">Wallet connection issues</button>
+                    <button class="support-option" onclick="handleSupportClick('Transaction status')">Transaction status</button>
+                    <button class="support-option" onclick="handleSupportClick('General inquiry')">General inquiry</button>
+                </div>
+                <div class="support-chat" id="supportChat" style="display: none;">
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <div class="chat-input">
+                        <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="handleChatKeyPress(event)">
+                        <button onclick="sendChatMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script type="module" src="wallet.js"></script>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 20px; }
+      button { padding: 8px 16px; margin: 4px; cursor: pointer; }
+      #status { margin-bottom: 12px; font-weight: bold; }
+      .ux-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .ux-modal {
+      background: #0f1115;
+      color: #ffffff;
+      width: 90%;
+      max-width: 360px;
+      border-radius: 14px;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .ux-spinner {
+      width: 42px;
+      height: 42px;
+      border: 4px solid #2a2d35;
+      border-top: 4px solid #4caf50;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 14px;
+    }
+
+    .ux-status-icon {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    #uxText {
+      font-size: 15px;
+      line-height: 1.5;
+      opacity: 0.95;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    </style>
+</body>
+</html>
